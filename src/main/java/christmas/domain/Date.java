@@ -6,7 +6,8 @@ import java.util.EnumMap;
 
 public class Date {
     private static final int DISCOUNT_PRICE = 2023;
-
+    private static final int SPECIAL_DISCOUNT_PRICE = 1000;
+    private static final int CHRISTMAS_DATE = 25;
     private LocalDate date;
 
     public Date(int date) {
@@ -22,4 +23,11 @@ public class Date {
             discount += orderInfo.get(Category.DESSERT) * DISCOUNT_PRICE;
         }
     }
+    private void specialDiscount(int discount){
+        DayOfWeek dayOfWeek = date.getDayOfWeek();
+        if (dayOfWeek.equals(DayOfWeek.SUNDAY) || date.getDayOfMonth() == CHRISTMAS_DATE){
+            discount += SPECIAL_DISCOUNT_PRICE;
+        }
+    }
+
 }
