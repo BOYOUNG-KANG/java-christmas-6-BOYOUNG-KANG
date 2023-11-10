@@ -76,9 +76,9 @@
 ### View
 #### InputView
 - 입력 받는 데이터 처리하는 로직
-    -[ ] 방문 날짜 입력 받기
-      - [ ] 숫자 여부 예외 처리
-         - [ ] 예외 발생 시, IllegalArgumentException 발생 후,
+    -[x] 방문 날짜 입력 받기
+      - [x] 숫자 여부 예외 처리
+         - [x] 예외 발생 시, IllegalArgumentException 발생 후,
          "[ERROR]"로 시작하는 에러 메시지를 출력 후 다시 입력 받기
 #### OutputView
 - 출력하는 데이터 처리하는 로직
@@ -107,6 +107,8 @@
 ### Message
 #### EventMessage
 - 이벤트 메시지를 관리하는 클래스
+#### ValidateErrorMessage
+- 잘못된 입력값에 대한 에러 메시지 정리한 클래ㅌ
 
 ### Constant
 #### EventConstant
