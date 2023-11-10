@@ -20,4 +20,12 @@ public enum Menu {
         this.category = category;
         this.price = price;
     }
+
+    public Category getCategory() {
+        return category;
+    }
+
+    public int getPrice() {
+        return price;
+    }
 }
