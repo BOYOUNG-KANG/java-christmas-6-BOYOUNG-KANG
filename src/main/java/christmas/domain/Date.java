@@ -18,5 +18,8 @@ public class Date {
         if (dayOfWeek.equals(DayOfWeek.FRIDAY) || dayOfWeek.equals(DayOfWeek.SATURDAY)){
             discount += orderInfo.get(Category.MAIN) * DISCOUNT_PRICE;
         }
+        if (!dayOfWeek.equals(DayOfWeek.FRIDAY) && !dayOfWeek.equals(DayOfWeek.SATURDAY)){
+            discount += orderInfo.get(Category.DESSERT) * DISCOUNT_PRICE;
+        }
     }
 }
