@@ -2,10 +2,12 @@ package christmas.controller;
 
 import christmas.domain.Date;
 import christmas.domain.Menu;
+import christmas.domain.Payment;
 import christmas.util.Validator;
 import christmas.view.InputView;
 import christmas.view.OutputView;
 import java.util.EnumMap;
+import java.util.Map;
 
 public class EventController {
     InputView inputView;
@@ -18,12 +20,18 @@ public class EventController {
         this.validator = validator;
     }
 
-    public void start(){
+    public void progress(){
         outputView.printStart();
-        int date = getDate();
+        int reservationDate = getDate();
         EnumMap<Menu, Integer> menu = getMenu();
-        outputView.printEvent(date);
+
+        outputView.printEvent(reservationDate);
+        outputView.printOrder(menu);
+
+        Payment payment = new Payment(menu);
+        outputView.printOriginPayment(payment.getPayment());
     }
+
     private int getDate(){
         try {
             return validator.validate(inputView.getDate());
