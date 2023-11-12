@@ -1,8 +1,10 @@
 package christmas.controller;
 
+import christmas.domain.Menu;
 import christmas.util.Validator;
 import christmas.view.InputView;
 import christmas.view.OutputView;
+import java.util.EnumMap;
 
 public class EventController {
     InputView inputView;
@@ -16,8 +18,9 @@ public class EventController {
     }
 
     public void start(){
-        outputView.printStartMessage();
+        outputView.printStart();
         int date = getDate();
+        EnumMap<Menu, Integer> menu = getMenu();
     }
     private int getDate(){
         try {
@@ -25,6 +28,14 @@ public class EventController {
         } catch (IllegalArgumentException e) {
             System.out.println(e);
             return getDate();
+        }
+    }
+    private EnumMap<Menu, Integer> getMenu(){
+        try {
+            return validator.validate(inputView.getMenu());
+        } catch (IllegalArgumentException e) {
+            System.out.println(e);
+            return getMenu();
         }
     }
 }
