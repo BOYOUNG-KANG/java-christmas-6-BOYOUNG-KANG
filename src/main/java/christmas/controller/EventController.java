@@ -1,5 +1,6 @@
 package christmas.controller;
 
+import christmas.domain.Date;
 import christmas.domain.Menu;
 import christmas.util.Validator;
 import christmas.view.InputView;
@@ -21,6 +22,7 @@ public class EventController {
         outputView.printStart();
         int date = getDate();
         EnumMap<Menu, Integer> menu = getMenu();
+        outputView.printEvent(date);
     }
     private int getDate(){
         try {
