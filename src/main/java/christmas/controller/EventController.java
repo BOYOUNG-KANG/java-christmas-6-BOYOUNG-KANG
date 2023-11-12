@@ -29,7 +29,10 @@ public class EventController {
         outputView.printOrder(menu);
 
         Payment payment = new Payment(menu);
+        Date date = new Date(reservationDate);
         outputView.printOriginPayment(payment.getPayment());
+        int priceOfGift = payment.presentChampagne();
+        outputView.printPresentChampagne(priceOfGift);
     }
 
     private int getDate(){

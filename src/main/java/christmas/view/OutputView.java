@@ -7,7 +7,7 @@ import java.util.EnumMap;
 import java.util.Map;
 
 public class OutputView {
-    
+    private static final String NOTHING = "없음";
 
     public void printStart(){
         System.out.println(EventMessage.START_MESSAGE);
@@ -26,5 +26,13 @@ public class OutputView {
         System.out.println("\n" + EventMessage.PAYMENT);
         System.out.println(new DecimalFormat("###,###").format(payment) + "원");
     }
-
+    public void printPresentChampagne(int presentChampagne){
+        System.out.println("\n" + EventMessage.PRESENT);
+        if (presentChampagne == 0) {
+            System.out.println(NOTHING);
+        }
+        if (presentChampagne == Menu.CHAMPAGNE.getPrice()) {
+            System.out.printf("샴페인 1개");
+        }
+    }
 }
