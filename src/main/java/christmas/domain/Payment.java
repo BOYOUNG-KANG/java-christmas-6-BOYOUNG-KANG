@@ -1,7 +1,6 @@
 package christmas.domain;
 
 import java.util.EnumMap;
-import java.util.Map;
 
 public class Payment {
     private int payment;
@@ -10,18 +9,17 @@ public class Payment {
         this.payment = getPayment(menuInfo);
     }
     private static int getPayment(EnumMap<Menu, Integer> menuInfo) {
-        int payment = 0;
-        for (Map.Entry<Menu, Integer> menu : menuInfo.entrySet()) {
-            payment += menu.getKey().getPrice() * menu.getValue();
-        }
-        return payment;
+        return menuInfo.entrySet().stream()
+                .mapToInt(entry -> entry.getKey().getPrice() * entry.getValue())
+                .sum();
     }
-    public int presentChampagne() {
-        int discount = 0;
+    public void present(EnumMap<Results, Integer> results){
+        presentChampagne(results);
+    }
+    private void presentChampagne(EnumMap<Results, Integer> results) {
         if (payment >= 120000) {
-            discount += Menu.CHAMPAGNE.getPrice();
+            results.put(Results.PRESENT, -Menu.CHAMPAGNE.getPrice());
         }
-        return discount;
     }
 
     public int getPayment() {

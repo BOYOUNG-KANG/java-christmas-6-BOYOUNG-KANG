@@ -3,11 +3,12 @@ package christmas.controller;
 import christmas.domain.Date;
 import christmas.domain.Menu;
 import christmas.domain.Payment;
+import christmas.domain.Results;
+import christmas.dto.ResultsResponse;
 import christmas.util.Validator;
 import christmas.view.InputView;
 import christmas.view.OutputView;
 import java.util.EnumMap;
-import java.util.Map;
 
 public class EventController {
     InputView inputView;
@@ -28,11 +29,24 @@ public class EventController {
         outputView.printEvent(reservationDate);
         outputView.printOrder(menu);
 
+        EnumMap<Results, Integer> results = setUpResults();
+
         Payment payment = new Payment(menu);
         Date date = new Date(reservationDate);
-        outputView.printOriginPayment(payment.getPayment());
-        int priceOfGift = payment.presentChampagne();
-        outputView.printPresentChampagne(priceOfGift);
+        date.discount(menu, results);
+        payment.present(results);
+
+        outputView.printResult(new ResultsResponse(payment.getPayment(), results));
+    }
+
+    private static EnumMap<Results, Integer> setUpResults() {
+        EnumMap<Results, Integer> results = new EnumMap<>(Results.class);
+        results.put(Results.CHRISTMAS_DISCOUNT, 0);
+        results.put(Results.WEEKDAY_DISCOUNT, 0);
+        results.put(Results.WEEKEND_DISCOUNT, 0);
+        results.put(Results.SPECIAL_DISCOUNT, 0);
+        results.put(Results.PRESENT, 0);
+        return results;
     }
 
     private int getDate(){

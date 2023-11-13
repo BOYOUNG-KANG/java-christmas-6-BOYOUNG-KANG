@@ -13,18 +13,21 @@ public class Date {
     public Date(int date) {
         this.date = LocalDate.of(2023, 12, date);
     }
-    public int discount(int discount, EnumMap<Menu, Integer> orderInfo){
-        return dayOfWeekDiscount(discount, orderInfo);
+    public void discount(EnumMap<Menu, Integer> orderInfo, EnumMap<Results, Integer> results){
+        dayOfWeekDiscount(orderInfo, results);
+        specialDiscount(results);
+        christmasDiscount(results);
     }
-    private int dayOfWeekDiscount(int discount, EnumMap<Menu, Integer> orderInfo){
+    private void dayOfWeekDiscount(EnumMap<Menu, Integer> orderInfo, EnumMap<Results, Integer> results){
         DayOfWeek dayOfWeek = date.getDayOfWeek();
         if (dayOfWeek.equals(DayOfWeek.FRIDAY) || dayOfWeek.equals(DayOfWeek.SATURDAY)){
-            discount += countBenefittedMenus(orderInfo, Category.MAIN) * DISCOUNT_PRICE;
+            int discount = countBenefittedMenus(orderInfo, Category.MAIN) * DISCOUNT_PRICE;
+            results.put(Results.WEEKEND_DISCOUNT, -discount);
         }
         if (!dayOfWeek.equals(DayOfWeek.FRIDAY) && !dayOfWeek.equals(DayOfWeek.SATURDAY)){
-            discount += countBenefittedMenus(orderInfo, Category.DESSERT) * DISCOUNT_PRICE;
+            int discount = countBenefittedMenus(orderInfo, Category.DESSERT) * DISCOUNT_PRICE;
+            results.put(Results.WEEKDAY_DISCOUNT, -discount);
         }
-        return specialDiscount(discount);
     }
     private int countBenefittedMenus(EnumMap<Menu, Integer> orderInfo, Category category){
         return orderInfo.entrySet().stream()
@@ -32,18 +35,17 @@ public class Date {
                 .mapToInt(Map.Entry::getValue)
                 .sum();
     }
-    private int specialDiscount(int discount){
+    private void specialDiscount(EnumMap<Results, Integer> results){
         DayOfWeek dayOfWeek = date.getDayOfWeek();
         if (dayOfWeek.equals(DayOfWeek.SUNDAY) || date.getDayOfMonth() == CHRISTMAS_DATE){
-            discount += 1000;
+            results.put(Results.SPECIAL_DISCOUNT, -1000);
         }
-        return christmasDiscount(discount);
     }
-    private int christmasDiscount(int discount){
+    private void christmasDiscount(EnumMap<Results, Integer> results){
         int dayOfMonth = date.getDayOfMonth();
         if (dayOfMonth <= CHRISTMAS_DATE) {
-            discount += (1000 + 100 * (dayOfMonth - 1));
+            int discount = 1000 + 100 * (dayOfMonth - 1);
+            results.put(Results.CHRISTMAS_DISCOUNT, -discount);
         }
-        return discount;
     }
 }
