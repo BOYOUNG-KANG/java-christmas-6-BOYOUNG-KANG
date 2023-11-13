@@ -13,15 +13,9 @@ public enum Badge {
         this.discount = discount;
     }
     public static Badge get(int totalDiscount){
-        if (totalDiscount >= SANTA.discount) {
-            return SANTA;
-        }
-        if (totalDiscount >= TREE.discount) {
-            return TREE;
-        }
-        if (totalDiscount >= STAR.discount) {
-            return STAR;
-        }
+        if (totalDiscount >= SANTA.discount) return SANTA;
+        if (totalDiscount >= TREE.discount) return TREE;
+        if (totalDiscount >= STAR.discount) return STAR;
         return NOTHING;
     }
 
