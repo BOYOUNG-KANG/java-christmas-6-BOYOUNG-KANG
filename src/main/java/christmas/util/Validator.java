@@ -4,8 +4,8 @@ import christmas.domain.Category;
 import christmas.domain.Menu;
 import christmas.message.ValidateErrorMessage;
 import java.util.EnumMap;
-import java.util.HashSet;
-import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 public class Validator {
     private static final int FIRST_DAY = 1;
@@ -18,12 +18,15 @@ public class Validator {
         return date;
     }
     public EnumMap<Menu, Integer> validate(EnumMap<Menu, Integer> menuInput) {
-        int totalCount = 0;
-        HashSet<Category> categories = new HashSet<>();
-        for (Map.Entry<Menu, Integer> menu : menuInput.entrySet()) {
-            totalCount += menu.getValue();
-            categories.add(menu.getKey().getCategory());
-        }
+        int totalCount = menuInput.values()
+                .stream()
+                .mapToInt(Integer::intValue)
+                .sum();
+        Set<Category> categories = menuInput.keySet()
+                .stream()
+                .map(Menu::getCategory)
+                .collect(Collectors.toSet());
+
         validateCategories(categories);
         validateTotalCount(totalCount);
         return menuInput;
@@ -33,7 +36,7 @@ public class Validator {
             throw new IllegalArgumentException(ValidateErrorMessage.MENU_COUNT_ERROR.getMessage());
         }
     }
-    private static void validateCategories(HashSet<Category> categories) {
+    private static void validateCategories(Set<Category> categories) {
         if (categories.contains(Category.DRINK) && categories.size() == 1) {
             throw new IllegalArgumentException(ValidateErrorMessage.MENU_CATEGORY_ERROR.getMessage());
         }
