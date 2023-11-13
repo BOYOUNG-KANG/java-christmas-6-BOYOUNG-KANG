@@ -10,11 +10,6 @@ import java.util.Map;
 
 public class OutputView {
     private static final String NOTHING = "없음";
-    private static final String CHRISTMAS_DISCOUNT = "크리스마스 디데이 할인: ";
-    private static final String WEEKDAY_DISCOUNT = "평일 할인: ";
-    private static final String WEEKEND_DISCOUNT = "주말 할인: ";
-    private static final String SPECIAL_DISCOUNT = "특별 할인: ";
-    private static final String PRESENT = "증정 이벤트: ";
 
     public void printStart(){
         System.out.println(EventMessage.START_MESSAGE);
@@ -49,19 +44,17 @@ public class OutputView {
 
     private static void printBenefits(ResultsResponse response) {
         System.out.println("\n" + EventMessage.BENEFIT);
-        printBenefit(response.results().get(Results.CHRISTMAS_DISCOUNT), CHRISTMAS_DISCOUNT);
-        printBenefit(response.results().get(Results.WEEKDAY_DISCOUNT), WEEKDAY_DISCOUNT);
-        printBenefit(response.results().get(Results.WEEKEND_DISCOUNT), WEEKEND_DISCOUNT);
-        printBenefit(response.results().get(Results.SPECIAL_DISCOUNT), SPECIAL_DISCOUNT);
-        printBenefit(response.results().get(Results.PRESENT), PRESENT);
+        for (Results result : Results.values()) {
+            printBenefit(response.results().get(result), result.getName());
+        }
         if (response.totalDiscount() == 0) {
             System.out.println(NOTHING);
         }
     }
 
-    private static void printBenefit(int discount, String discountMessage) {
+    private static void printBenefit(int discount, String message) {
         if (discount != 0) {
-            System.out.print(discountMessage + formatPrice(discount) + "원\n");
+            System.out.print(message + ": " + formatPrice(discount) + "원\n");
         }
     }
 
