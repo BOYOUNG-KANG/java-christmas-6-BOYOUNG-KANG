@@ -1,5 +1,6 @@
 package christmas.controller;
 
+import christmas.domain.Badge;
 import christmas.domain.Date;
 import christmas.domain.Menu;
 import christmas.domain.Payment;
@@ -35,8 +36,11 @@ public class EventController {
         Date date = new Date(reservationDate);
         date.discount(menu, results);
         payment.present(results);
-
-        outputView.printResult(new ResultsResponse(payment.getPayment(), results));
+        int totalDiscount = results.get(Results.CHRISTMAS_DISCOUNT) + results.get(Results.WEEKDAY_DISCOUNT) +
+                results.get(Results.WEEKEND_DISCOUNT) + results.get(Results.SPECIAL_DISCOUNT) + results.get(Results.PRESENT);
+        Badge badge = Badge.get(totalDiscount);
+        outputView.printResults(
+                new ResultsResponse(payment.getPayment(), results, badge));
     }
 
     private static EnumMap<Results, Integer> setUpResults() {
