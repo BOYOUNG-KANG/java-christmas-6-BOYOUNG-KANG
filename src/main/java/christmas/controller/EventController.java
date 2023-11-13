@@ -27,14 +27,17 @@ public class EventController {
         int reservationDate = getDate();
         EnumMap<Menu, Integer> menu = getMenu();
 
-        outputView.printEvent(reservationDate);
-        outputView.printOrder(menu);
-
         EnumMap<Results, Integer> results = setUpResults();
         Payment payment = new Payment(menu);
         new Date(reservationDate).discount(menu, results);
         payment.present(results);
+        printResults(reservationDate, menu, results, payment);
+    }
 
+    private void printResults(int reservationDate, EnumMap<Menu, Integer> menu,
+            EnumMap<Results, Integer> results, Payment payment) {
+        outputView.printEvent(reservationDate);
+        outputView.printOrder(menu);
         outputView.printResults(
                 new ResultsResponse(payment.getPayment(), results,
                         Badge.get(getTotalDiscount(results)))
@@ -51,11 +54,9 @@ public class EventController {
 
     private static EnumMap<Results, Integer> setUpResults() {
         EnumMap<Results, Integer> results = new EnumMap<>(Results.class);
-        results.put(Results.CHRISTMAS_DISCOUNT, 0);
-        results.put(Results.WEEKDAY_DISCOUNT, 0);
-        results.put(Results.WEEKEND_DISCOUNT, 0);
-        results.put(Results.SPECIAL_DISCOUNT, 0);
-        results.put(Results.PRESENT, 0);
+        for (Results result : Results.values()) {
+            results.put(result, 0);
+        }
         return results;
     }
 
