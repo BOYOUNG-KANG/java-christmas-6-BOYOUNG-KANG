@@ -31,16 +31,22 @@ public class EventController {
         outputView.printOrder(menu);
 
         EnumMap<Results, Integer> results = setUpResults();
-
         Payment payment = new Payment(menu);
-        Date date = new Date(reservationDate);
-        date.discount(menu, results);
+        new Date(reservationDate).discount(menu, results);
         payment.present(results);
-        int totalDiscount = results.get(Results.CHRISTMAS_DISCOUNT) + results.get(Results.WEEKDAY_DISCOUNT) +
-                results.get(Results.WEEKEND_DISCOUNT) + results.get(Results.SPECIAL_DISCOUNT) + results.get(Results.PRESENT);
-        Badge badge = Badge.get(totalDiscount);
+
         outputView.printResults(
-                new ResultsResponse(payment.getPayment(), results, badge));
+                new ResultsResponse(payment.getPayment(), results,
+                        Badge.get(getTotalDiscount(results)))
+        );
+    }
+
+    private static int getTotalDiscount(EnumMap<Results, Integer> results) {
+        return results.get(Results.CHRISTMAS_DISCOUNT)
+                + results.get(Results.WEEKDAY_DISCOUNT)
+                + results.get(Results.WEEKEND_DISCOUNT)
+                + results.get(Results.SPECIAL_DISCOUNT)
+                + results.get(Results.PRESENT);
     }
 
     private static EnumMap<Results, Integer> setUpResults() {
