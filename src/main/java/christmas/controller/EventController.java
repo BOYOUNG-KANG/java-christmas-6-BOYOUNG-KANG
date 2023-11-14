@@ -16,7 +16,9 @@ public class EventController {
     OutputView outputView;
     Validator validator;
 
-    public EventController(InputView inputView, OutputView outputView, Validator validator) {
+    public EventController(InputView inputView,
+            OutputView outputView,
+            Validator validator) {
         this.inputView = inputView;
         this.outputView = outputView;
         this.validator = validator;
@@ -26,11 +28,12 @@ public class EventController {
         outputView.printStart();
         int reservationDate = getDate();
         EnumMap<Menu, Integer> menu = getMenu();
-
         EnumMap<Results, Integer> results = setUpResults();
-        Payment payment = new Payment(menu);
+
         new Date(reservationDate).discount(menu, results);
+        Payment payment = new Payment(menu);
         payment.present(results);
+
         printResults(reservationDate, menu, results, payment);
     }
 
