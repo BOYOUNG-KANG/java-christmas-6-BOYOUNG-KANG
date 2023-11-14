@@ -17,19 +17,19 @@ public class Validator {
         }
         return date;
     }
-    public EnumMap<Menu, Integer> validate(EnumMap<Menu, Integer> menuInput) {
-        int totalCount = menuInput.values()
+    public EnumMap<Menu, Integer> validate(EnumMap<Menu, Integer> menu) {
+        int totalCount = menu.values()
                 .stream()
                 .mapToInt(Integer::intValue)
                 .sum();
-        Set<Category> categories = menuInput.keySet()
+        Set<Category> categories = menu.keySet()
                 .stream()
                 .map(Menu::getCategory)
                 .collect(Collectors.toSet());
 
         validateCategories(categories);
         validateTotalCount(totalCount);
-        return menuInput;
+        return menu;
     }
     private static void validateTotalCount(int totalCount) {
         if (totalCount > MAX_NUMBER_OF_MENUS) {
