@@ -9,6 +9,7 @@ import java.util.Map;
 public class EventCalculator {
     private static final int DISCOUNT_PRICE = 2023;
     private static final int CHRISTMAS_DATE = 25;
+    private static final int EVENT_APPLIED_PAYMENT = 10000;
     private LocalDate date;
     private int payment;
     private EnumMap<Menu, Integer> menu;
@@ -25,6 +26,9 @@ public class EventCalculator {
     }
     public EventResultsDto progress(){
         EnumMap<Event, Integer> updateEventResults = setUpEventResults();
+        if (payment < EVENT_APPLIED_PAYMENT) {
+            return new EventResultsDto(updateEventResults);
+        }
         dayOfWeekDiscount(updateEventResults);
         specialDiscount(updateEventResults);
         christmasDiscount(updateEventResults);
