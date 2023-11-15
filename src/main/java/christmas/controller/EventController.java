@@ -1,11 +1,10 @@
 package christmas.controller;
 
 import christmas.domain.Badge;
-import christmas.domain.Date;
+import christmas.domain.EventCalculator;
 import christmas.domain.Menu;
-import christmas.domain.Payment;
-import christmas.domain.Results;
-import christmas.dto.ResultsResponse;
+import christmas.domain.Event;
+import christmas.dto.EventResultsDto;
 import christmas.util.Validator;
 import christmas.view.InputView;
 import christmas.view.OutputView;
@@ -26,42 +25,32 @@ public class EventController {
 
     public void progress(){
         outputView.printStart();
-        int reservationDate = getDate();
+        int date = getDate();
         EnumMap<Menu, Integer> menu = getMenu();
-        EnumMap<Results, Integer> results = setUpResults();
 
-        new Date(reservationDate).discount(menu, results);
-        Payment payment = new Payment(menu);
-        payment.present(results);
+        EventCalculator eventCalculator = new EventCalculator(date, menu);
+        EventResultsDto eventResultsDto = eventCalculator.progress();
 
-        printResults(reservationDate, menu, results, payment);
+        Badge badge = Badge.get(-getTotalDiscount(eventResultsDto.eventResults()));
+
+        printResults(date, menu, eventCalculator.getPayment(), eventResultsDto, badge);
     }
 
-    private void printResults(int reservationDate, EnumMap<Menu, Integer> menu,
-            EnumMap<Results, Integer> results, Payment payment) {
-        outputView.printEvent(reservationDate);
+    private void printResults(int date, EnumMap<Menu, Integer> menu, int payment,
+            EventResultsDto eventResultsDto, Badge badge) {
+        outputView.printEvent(date);
         outputView.printOrder(menu);
-        outputView.printResults(
-                new ResultsResponse(payment.getPayment(), results,
-                        Badge.get(getTotalDiscount(results)))
-        );
+        outputView.printResults(payment, badge, eventResultsDto);
     }
 
-    private static int getTotalDiscount(EnumMap<Results, Integer> results) {
-        return results.get(Results.CHRISTMAS_DISCOUNT)
-                + results.get(Results.WEEKDAY_DISCOUNT)
-                + results.get(Results.WEEKEND_DISCOUNT)
-                + results.get(Results.SPECIAL_DISCOUNT)
-                + results.get(Results.PRESENT);
+    private static int getTotalDiscount(EnumMap<Event, Integer> results) {
+        return results.get(Event.CHRISTMAS_DISCOUNT)
+                + results.get(Event.WEEKDAY_DISCOUNT)
+                + results.get(Event.WEEKEND_DISCOUNT)
+                + results.get(Event.SPECIAL_DISCOUNT)
+                + results.get(Event.PRESENT);
     }
 
-    private static EnumMap<Results, Integer> setUpResults() {
-        EnumMap<Results, Integer> results = new EnumMap<>(Results.class);
-        for (Results result : Results.values()) {
-            results.put(result, 0);
-        }
-        return results;
-    }
 
     private int getDate(){
         try {

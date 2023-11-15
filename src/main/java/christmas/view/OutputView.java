@@ -1,8 +1,9 @@
 package christmas.view;
 
+import christmas.domain.Badge;
 import christmas.domain.Menu;
-import christmas.domain.Results;
-import christmas.dto.ResultsResponse;
+import christmas.domain.Event;
+import christmas.dto.EventResultsDto;
 import christmas.message.EventMessage;
 import java.text.DecimalFormat;
 import java.util.EnumMap;
@@ -24,16 +25,15 @@ public class OutputView {
             System.out.println(entry.getKey().getName() + " " + entry.getValue() + "개");
         }
     }
-    public void printResults(ResultsResponse response){
-        printResult(EventMessage.PAYMENT, formatPrice(response.payment()) + "원");
-        printPresent(response.results().get(Results.PRESENT));
-        printBenefits(response);
+    public void printResults(int payment, Badge badge, EventResultsDto eventResultsDto){
+        printResult(EventMessage.PAYMENT, formatPrice(payment) + "원");
+        printPresent(eventResultsDto.eventResults().get(Event.PRESENT));
+        printBenefits(eventResultsDto);
         printResult(EventMessage.BENEFIT_PRIZE,
-                formatPrice(response.totalDiscount() +
-                        response.results().get(Results.PRESENT)) + "원");
+                formatPrice(eventResultsDto.totalDiscount()) + "원");
         printResult(EventMessage.EXPECTED_PAYMENT,
-                formatPrice(response.payment() + response.totalDiscount()) + "원");
-        printResult(EventMessage.BADGE, response.badge().getName());
+                formatPrice(payment + eventResultsDto.totalDiscount() - eventResultsDto.eventResults().get(Event.PRESENT)) + "원");
+        printResult(EventMessage.BADGE, badge.getName());
     }
 
     private static void printResult(String message, String result) {
@@ -41,12 +41,12 @@ public class OutputView {
         System.out.println(result);
     }
 
-    private static void printBenefits(ResultsResponse response) {
+    private static void printBenefits(EventResultsDto eventResultsDto) {
         System.out.println("\n" + EventMessage.BENEFIT);
-        for (Results result : Results.values()) {
-            printBenefit(response.results().get(result), result.getName());
+        for (Event result : Event.values()) {
+            printBenefit(eventResultsDto.eventResults().get(result), result.getName());
         }
-        if (response.totalDiscount() == 0) {
+        if (eventResultsDto.totalDiscount() == 0) {
             System.out.println(NOTHING);
         }
     }
