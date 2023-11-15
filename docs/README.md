@@ -1,3 +1,7 @@
+## 최종 설계
+![정리](https://github-production-user-asset-6210df.s3.amazonaws.com/102157897/283122076-fb8b6979-f42d-47be-9b8b-7e5da3288fbf.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAIWNJYAX4CSVEH53A%2F20231115%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20231115T130555Z&X-Amz-Expires=300&X-Amz-Signature=6b79f38ba7b6298bf312dea29d1a2f778ab73ed98d3f84991e301944acc0adf6&X-Amz-SignedHeaders=host&actor_id=102157897&key_id=0&repo_id=716435044)
+
+---
 ## 기능 수행 이해
 1. 이벤트 시작 메시지 출력 하기
 2. 방문 날짜 입력 받기
@@ -50,6 +54,7 @@
 - 이벤트와 관련된 혜택 처리하는 로직
   - [x] 방문 날짜 입력 받기
   - [x] 날짜에 대한 혜택 계산하기
+     - [x] 구매 금액이 1000원 미만일 경우 이벤트 적용 안되도록 예외 처리
       - [x] 크리스마스 할인 계산
       - [x] 평일 할인 계산
       - [x] 주말 할인 계산
@@ -116,8 +121,4 @@
 #### EventMessage
 - 이벤트 메시지를 관리하는 클래스
 #### ValidateErrorMessage
-- 잘못된 입력값에 대한 에러 메시지 정리한 클래ㅌ
-
-### Constant
-#### EventConstant
-- 이벤트 상수를 관리하는 클래스
+- 잘못된 입력값에 대한 에러 메시지 정리한 클래스
